@@ -6,7 +6,7 @@ authors = ["Austin Bonander <austin.bonander@gmail.com>", "Alex DeLorenzo <alex@
 
 description = "A simple library that provides perceptual hashing and difference calculation for images. Includes median PHash"
 
-license = "AGPL"
+license = " AGPL-3.0-only"
 
 documentation = "http://docs.rs/img_hash"
 
