@@ -1,5 +1,5 @@
-mod blockhash;
 
+mod blockhash;
 use {BitSet, HashCtxt, Image};
 
 use self::HashAlg::*;
@@ -73,6 +73,8 @@ pub enum HashAlg {
     /// https://github.com/commonsmachinery/blockhash-rfc/blob/master/main.md
     Blockhash,
 
+    Median,
+
     /// EXHAUSTIVE MATCHING IS NOT RECOMMENDED FOR BACKWARDS COMPATIBILITY REASONS
     /// New variants may be added in minor (x.[y + 1].z) releases
     #[doc(hidden)]
@@ -116,6 +118,8 @@ impl HashAlg {
                                                                                        rowstride)),
             (DoubleGradient, Bytes(ref bytes)) => B::from_bools(double_gradient_hash(bytes,
                                                                                      rowstride)),
+            (Median, Floats(ref floats)) => B::from_bools(median_hash_f32(floats)),
+            (Median, Bytes(ref bytes)) => B::from_bools(median_hash_f32(bytes)),
             (Blockhash, _) | (__Nonexhaustive, _) => unreachable!(),
         }
     }
@@ -148,6 +152,44 @@ fn mean_hash_u8<'a>(luma: &'a [u8]) -> impl Iterator<Item = bool> + 'a {
 fn mean_hash_f32<'a>(luma: &'a [f32]) -> impl Iterator<Item = bool> + 'a {
     let mean = luma.iter().sum::<f32>() / luma.len() as f32;
     luma.iter().map(move |&x| x >= mean)
+}
+
+fn median_f32(numbers: &[f32]) -> f32 {
+    let mut sorted = numbers.to_owned();
+    sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
+
+    let mid = sorted.len() / 2;
+    if sorted.len() % 2 == 0 {
+      let a = sorted[mid - 1];
+      let b = sorted[mid];
+      (a + b)  / 2.0
+    } else {
+        sorted[mid]
+    }
+}
+
+fn median_u8(numbers: &[u8]) -> u8 {
+    let mut sorted = numbers.to_owned();
+    sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
+
+    let mid = sorted.len() / 2;
+    if sorted.len() % 2 == 0 {
+      let a = sorted[mid - 1];
+      let b = sorted[mid];
+      (a + b) / 2
+    } else {
+        sorted[mid]
+    }
+}
+
+fn median_hash_u8<'a>(luma: &'a [u8]) -> impl Iterator<Item = bool> + 'a {
+    let med = median_u8(luma);
+    luma.iter().map(move |&x| x >= med)
+}
+
+fn median_hash_f32<'a>(luma: &'a [f32]) -> impl Iterator<Item = bool> + 'a {
+    let med = median_f32(luma);
+    luma.iter().map(move |&x| x >= med)
 }
 
 /// The guts of the gradient hash separated so we can reuse them
