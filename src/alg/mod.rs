@@ -73,6 +73,13 @@ pub enum HashAlg {
     /// https://github.com/commonsmachinery/blockhash-rfc/blob/master/main.md
     Blockhash,
 
+    /// The Median hashing algorithm.
+    ///
+    /// This is a variation of the Mean hashing algorithm that uses the median
+    /// instead of the mean. This variation is discussed in the further reading section.
+    ///
+    /// Further Reading:
+    /// http://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
     Median,
 
     /// EXHAUSTIVE MATCHING IS NOT RECOMMENDED FOR BACKWARDS COMPATIBILITY REASONS
