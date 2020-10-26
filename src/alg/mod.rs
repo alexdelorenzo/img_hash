@@ -76,7 +76,9 @@ pub enum HashAlg {
     /// The Median hashing algorithm.
     ///
     /// This is a variation of the Mean hashing algorithm that uses the median
-    /// instead of the mean. This variation is discussed in the further reading section.
+    /// instead of the mean for filtering. 
+    /// This variation is discussed in the further reading section, and an implementation
+    /// can be found here https://github.com/JohannesBuchner/imagehash/blob/4de9becdb13ecad67b7393cc17b5a44ea1c61b6b/imagehash.py#L193: 
     ///
     /// Further Reading:
     /// http://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
