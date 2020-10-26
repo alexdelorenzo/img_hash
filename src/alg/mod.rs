@@ -135,6 +135,7 @@ impl HashAlg {
     pub (crate) fn resize_dimensions(&self, width: u32, height: u32) -> (u32, u32) {
         match *self {
             Mean => (width, height),
+            Median => (width, height),
             Blockhash => panic!("Blockhash algorithm does not resize"),
             Gradient => (width + 1, height),
             VertGradient => (width, height + 1),
@@ -160,11 +161,11 @@ fn median_f32(numbers: &[f32]) -> f32 {
 
     let mid = sorted.len() / 2;
     if sorted.len() % 2 == 0 {
-      let a = sorted[mid - 1];
-      let b = sorted[mid];
-      (a + b)  / 2.0
+        let a = sorted[mid - 1];
+        let b = sorted[mid];
+        (a + b)  / 2.0
     } else {
-        sorted[mid]
+          sorted[mid]
     }
 }
 
@@ -174,11 +175,11 @@ fn median_u8(numbers: &[u8]) -> u8 {
 
     let mid = sorted.len() / 2;
     if sorted.len() % 2 == 0 {
-      let a = sorted[mid - 1];
-      let b = sorted[mid];
-      (a + b) / 2
+        let a = sorted[mid - 1];
+        let b = sorted[mid];
+        (a + b) / 2
     } else {
-        sorted[mid]
+          sorted[mid]
     }
 }
 
